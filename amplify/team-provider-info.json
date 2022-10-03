@@ -1,0 +1,26 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-storageerror-dev-130927-authRole",
+      "UnauthRoleArn": "arn:aws:iam::296215747775:role/amplify-storageerror-dev-130927-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::296215747775:role/amplify-storageerror-dev-130927-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-storageerror-dev-130927-deployment",
+      "UnauthRoleName": "amplify-storageerror-dev-130927-unauthRole",
+      "StackName": "amplify-storageerror-dev-130927",
+      "StackId": "arn:aws:cloudformation:us-east-1:296215747775:stack/amplify-storageerror-dev-130927/8639a590-4346-11ed-ba7f-0aeaaa90c8cb",
+      "AmplifyAppId": "d271jk5g9q7z5y"
+    },
+    "categories": {
+      "auth": {
+        "storageerrore2c5e469": {}
+      },
+      "storage": {
+        "storageerror4f28ca90": {
+          "bucketName": "amplify-react-graphql-tut203806-staging",
+          "region": "us-east-1"
+        }
+      }
+    }
+  }
+}
