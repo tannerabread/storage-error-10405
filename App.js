@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, {useEffect} from 'react';
 import type {Node} from 'react';
 import {
   Button,
@@ -58,8 +58,18 @@ const App: () => Node = () => {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
+  useEffect(() => {
+    Storage.put('test', 'testFile')
+      .then(res => {
+        console.log('put', res);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
+
   async function getStorage() {
-    const Res = process.env.REACT_APP_S3_URL;
+    const Res = 'test';
 
     await Storage.get(Res)
       .then(res => {

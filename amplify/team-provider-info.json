@@ -13,13 +13,8 @@
     },
     "categories": {
       "auth": {
-        "storageerrore2c5e469": {}
-      },
-      "storage": {
-        "storageerror4f28ca90": {
-          "bucketName": "amplify-react-graphql-tut203806-staging",
-          "region": "us-east-1"
-        }
+        "storageerrore2c5e469": {},
+        "true": {}
       }
     }
   }

@@ -28,9 +28,8 @@
     }
   },
   "storage": {
-    "storageerror4f28ca90": {
+    "s3bc4a89bf": {
       "service": "S3",
-      "serviceType": "imported",
       "providerPlugin": "awscloudformation",
       "dependsOn": []
     }
