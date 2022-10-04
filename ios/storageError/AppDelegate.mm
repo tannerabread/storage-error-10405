@@ -13,19 +13,31 @@
 #import <React/RCTSurfacePresenter.h>
 #import <React/RCTSurfacePresenterBridgeAdapter.h>
 #import <ReactCommon/RCTTurboModuleManager.h>
+#endif
 
 #import <react/config/ReactNativeConfig.h>
+
+#ifdef RN_FABRIC_ENABLED
+#import <React/RCTFabricSurfaceHostingProxyRootView.h>
+#import <React/RCTSurfacePresenter.h>
+#import <React/RCTSurfacePresenterBridgeAdapter.h>
+#import <react/config/ReactNativeConfig.h>
+#endif
 
 static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 
 @interface AppDelegate () <RCTCxxBridgeDelegate, RCTTurboModuleManagerDelegate> {
   RCTTurboModuleManager *_turboModuleManager;
+  // RCTSurfacePresenterBridgeAdapter *_bridgeAdapter;
+  // std::shared_ptr<const facebook::react::ReactNativeConfig> _reactNativeConfig;
+  // facebook::react::ContextContainer::Shared _contextContainer;
+  #ifdef RN_FABRIC_ENABLED
   RCTSurfacePresenterBridgeAdapter *_bridgeAdapter;
   std::shared_ptr<const facebook::react::ReactNativeConfig> _reactNativeConfig;
   facebook::react::ContextContainer::Shared _contextContainer;
+  #endif
 }
 @end
-#endif
 
 @implementation AppDelegate
 
@@ -35,22 +47,41 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
 
-#if RCT_NEW_ARCH_ENABLED
+#ifdef RN_FABRIC_ENABLED
   _contextContainer = std::make_shared<facebook::react::ContextContainer const>();
   _reactNativeConfig = std::make_shared<facebook::react::EmptyReactNativeConfig const>();
   _contextContainer->insert("ReactNativeConfig", _reactNativeConfig);
-  _bridgeAdapter = [[RCTSurfacePresenterBridgeAdapter alloc] initWithBridge:bridge contextContainer:_contextContainer];
+  _bridgeAdapter = [[RCTSurfacePresenterBridgeAdapter alloc]
+        initWithBridge:bridge
+      contextContainer:_contextContainer];
   bridge.surfacePresenter = _bridgeAdapter.surfacePresenter;
+
+  UIView *rootView =
+      [[RCTFabricSurfaceHostingProxyRootView alloc] initWithBridge:bridge
+                                                        moduleName:@"storageError"
+                                                 initialProperties:@{}];
+#else
+  // Current implementation to define rootview.
+  RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
+                                                   moduleName:@"storageError"
+                                            initialProperties:@{}];
 #endif
+// #if RCT_NEW_ARCH_ENABLED
+//   _contextContainer = std::make_shared<facebook::react::ContextContainer const>();
+//   _reactNativeConfig = std::make_shared<facebook::react::EmptyReactNativeConfig const>();
+//   _contextContainer->insert("ReactNativeConfig", _reactNativeConfig);
+//   _bridgeAdapter = [[RCTSurfacePresenterBridgeAdapter alloc] initWithBridge:bridge contextContainer:_contextContainer];
+//   bridge.surfacePresenter = _bridgeAdapter.surfacePresenter;
+// #endif
 
-  NSDictionary *initProps = [self prepareInitialProps];
-  UIView *rootView = RCTAppSetupDefaultRootView(bridge, @"storageError", initProps);
+  // NSDictionary *initProps = [self prepareInitialProps];
+  // UIView *rootView = RCTAppSetupDefaultRootView(bridge, @"storageError", initProps);
 
-  if (@available(iOS 13.0, *)) {
-    rootView.backgroundColor = [UIColor systemBackgroundColor];
-  } else {
-    rootView.backgroundColor = [UIColor whiteColor];
-  }
+  // if (@available(iOS 13.0, *)) {
+  //   rootView.backgroundColor = [UIColor systemBackgroundColor];
+  // } else {
+  //   rootView.backgroundColor = [UIColor whiteColor];
+  // }
 
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
   UIViewController *rootViewController = [UIViewController new];

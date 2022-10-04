@@ -21,7 +21,8 @@ import {
 
 import {Colors, Header} from 'react-native/Libraries/NewAppScreen';
 
-import {Storage} from 'aws-amplify';
+import {Storage, Auth} from 'aws-amplify';
+import {withAuthenticator} from 'aws-amplify-react-native/dist/Auth';
 
 /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
  * LTI update could not be added via codemod */
@@ -51,7 +52,7 @@ const Section = ({children, title}): Node => {
   );
 };
 
-const App: () => Node = () => {
+const App: () => Node = ({signOut, user}) => {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
@@ -79,6 +80,11 @@ const App: () => Node = () => {
         console.log(error);
       });
   }
+  console.log('user', user);
+  Auth.currentAuthenticatedUser()
+    .then(user => console.log('currentAuth', user))
+    .catch(err => console.log(err));
+  console.log('currentCredentials', Auth.currentCredentials());
 
   return (
     <SafeAreaView style={backgroundStyle}>
@@ -98,6 +104,8 @@ const App: () => Node = () => {
             Edit <Text style={styles.highlight}>App.js</Text> to change this
             screen and then come back to see your edits.
             <Button onPress={getStorage} title="Get Storage" />
+            {user}
+            <Button onPress={signOut} title="Sign Out" />
           </Section>
         </View>
       </ScrollView>
@@ -124,4 +132,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default withAuthenticator(App);

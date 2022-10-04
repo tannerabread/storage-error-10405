@@ -10,6 +10,8 @@ target 'storageError' do
   # Flags change depending on the env values.
   flags = get_default_flags()
 
+  fabric_enabled = ENV['USE_FABRIC']
+
   use_react_native!(
     :path => config[:reactNativePath],
     # Hermes is now enabled by default. Disable by setting this flag to false.
@@ -23,7 +25,9 @@ target 'storageError' do
     # you should disable the next line.
     :flipper_configuration => FlipperConfiguration.enabled,
     # An absolute path to your application root.
-    :app_path => "#{Pod::Config.instance.installation_root}/.."
+    # :app_path => "#{Pod::Config.instance.installation_root}/.."
+    :app_path => "#{Dir.pwd}/..",
+    :fabric_enabled => fabric_enabled,
   )
 
   target 'storageErrorTests' do
